@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Outfit, Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const outfit = Outfit({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  weight: ["400", "600"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -21,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("h-full", "antialiased", outfit.variable, "font-sans", geist.variable)}>
-      <body className="min-h-full font-sans bg-background text-foreground">
+    <html lang="en" className="h-full antialiased">
+      <body className={cn("min-h-full bg-background text-foreground", inter.className)}>
         {children}
       </body>
     </html>

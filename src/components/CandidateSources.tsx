@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   PieChart, 
   Pie, 
@@ -10,61 +10,73 @@ import {
   Legend 
 } from 'recharts';
 import { motion } from 'framer-motion';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-const COLORS = ['#4f46e5', '#818cf8', '#a5b4fc', '#e2e8f0'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--primary) / 0.7)', 'hsl(var(--primary) / 0.4)', 'hsl(var(--muted))'];
 
 export default function CandidateSources({ data }: { data: any[] }) {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return <div className="lg:col-span-4 h-full min-h-[300px] bg-card animate-pulse rounded-xl" />;
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-card text-card-foreground border rounded-xl overflow-hidden shadow-none p-6 lg:col-span-4 h-full flex flex-col min-h-[400px]"
+      className="lg:col-span-4 h-full min-h-[300px]"
     >
-      <div className="mb-4">
-        <h2 className="text-xl font-bold text-foreground">Candidate Sources</h2>
-        <p className="text-sm text-secondary">Understand where your applicants are coming from</p>
-      </div>
-
-      <div className="flex-1 w-full flex items-center justify-center">
-        <ResponsiveContainer width="100%" height={250}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={5}
-              dataKey="value"
-              stroke="none"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip 
-              contentStyle={{ 
-                borderRadius: '12px', 
-                border: '1px solid #e2e8f0', 
-                boxShadow: 'none',
-                fontSize: '12px'
-              }}
-            />
-            <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      
-      <div className="mt-4 pt-4 border-t space-y-3">
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-secondary font-medium">Top Source</span>
-          <span className="text-foreground font-bold">JobGiga Search (45%)</span>
-        </div>
-        <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-          <div className="bg-primary h-full w-[45%]" />
-        </div>
-      </div>
+      <Card className="border-none shadow-none h-full flex flex-col bg-card">
+        <CardHeader className="px-5 py-4">
+          <CardTitle className="text-lg font-semibold tracking-tight">Sources</CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 flex flex-col justify-between pt-0 pb-4 px-5">
+          <div className="flex-1 min-h-[140px] w-full flex items-center justify-center">
+            <ResponsiveContainer width="100%" height={160} minWidth={0}>
+              <PieChart>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={65}
+                  paddingAngle={5}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ 
+                    borderRadius: '8px', 
+                    border: 'none', 
+                    boxShadow: 'none',
+                    backgroundColor: 'hsl(var(--foreground))',
+                    color: 'hsl(var(--primary-foreground))',
+                    fontSize: '9px'
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ fontSize: '8px', paddingTop: '10px' }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          
+          <div className="mt-2 pt-2 border-t space-y-2">
+            <div className="flex justify-between items-center text-[8px] uppercase font-semibold tracking-widest text-muted-foreground/70">
+              <span>Top Source</span>
+              <span className="text-foreground">JobGiga (45%)</span>
+            </div>
+            <div className="w-full bg-muted h-0.5 rounded-full overflow-hidden">
+              <div className="bg-primary h-full w-[45%]" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }

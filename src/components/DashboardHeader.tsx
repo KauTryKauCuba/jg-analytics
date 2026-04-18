@@ -2,53 +2,74 @@
 
 import React from 'react';
 import { Calendar, LayoutDashboard, Filter, ChevronDown } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
-export default function DashboardHeader() {
+interface DashboardHeaderProps {
+  onJobChange: (value: any) => void;
+  onRangeChange: (value: any) => void;
+  jobs: { key: string; name: string }[];
+}
+
+export default function DashboardHeader({ onJobChange, onRangeChange, jobs }: DashboardHeaderProps) {
   return (
-    <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b pb-8">
+    <div className="flex flex-col md:flex-row md:items-end justify-between mb-4 border-b border-border/50 pb-6">
       <div>
-        <div className="flex items-center gap-2 mb-2">
-          <div className="h-10 w-10 bg-primary/10 text-primary flex items-center justify-center rounded-xl">
-             <LayoutDashboard className="w-6 h-6" />
+        <div className="flex items-center gap-2 mb-1">
+          <div className="h-8 w-8 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
+             <LayoutDashboard className="w-5 h-5" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Employer Analytics</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground leading-none">JobGiga Intelligence</h1>
         </div>
-        <p className="text-secondary text-sm max-w-lg">
-          Track how your job posts and candidates are performing in real time. 
-          Make data-driven decisions to optimize your hiring process.
+        <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-widest max-w-sm">
+          Employer Dashboard Center
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mt-6 md:mt-0">
+      <div className="flex flex-wrap items-center gap-3 mt-4 md:mt-0">
         <div className="flex flex-col gap-1">
-          <label className="text-[10px] font-bold text-secondary uppercase tracking-wider ml-1">Filter by Job</label>
-          <div className="relative group">
-            <select className="appearance-none flex h-11 w-56 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm cursor-pointer hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors">
-              <option>All Jobs</option>
-              <option>Senior Software Engineer</option>
-              <option>Product Manager</option>
-              <option>UX/UI Designer</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-secondary absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-primary transition-colors" />
-          </div>
+          <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest ml-0.5">Focus Posting</label>
+          <Select defaultValue="all" onValueChange={onJobChange}>
+            <SelectTrigger className="w-[200px] h-9 bg-white border-border/50 font-semibold text-[11px] focus:ring-primary/20 rounded-lg">
+              <SelectValue placeholder="All Active Postings" />
+            </SelectTrigger>
+            <SelectContent className="font-semibold">
+              <SelectItem value="all">All Active Postings</SelectItem>
+              {jobs.map((job) => (
+                <SelectItem key={job.key} value={job.key}>{job.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-col gap-1">
-           <label className="text-[10px] font-bold text-secondary uppercase tracking-wider ml-1">Analytics Period</label>
-           <button className="flex items-center justify-between h-11 w-48 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm cursor-pointer hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors group">
-             <div className="flex items-center gap-2">
-               <Calendar className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" />
-               <span className="text-foreground font-medium">Last 30 days</span>
-             </div>
-             <ChevronDown className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" />
-           </button>
+           <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest ml-0.5">Timeline</label>
+           <Select defaultValue="30" onValueChange={onRangeChange}>
+            <SelectTrigger className="w-[120px] h-9 bg-white border-border/50 font-semibold text-[11px] focus:ring-primary/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                <SelectValue placeholder="30 days" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="font-semibold">
+              <SelectItem value="7">Last 7d</SelectItem>
+              <SelectItem value="30">Last 30d</SelectItem>
+              <SelectItem value="90">Last 90d</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="flex flex-col gap-1 pt-4">
-           <button className="inline-flex items-center justify-center rounded-xl font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 h-11 px-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-none shadow-indigo-100 hover:scale-[1.02] active:scale-[0.98]">
-             <Filter className="w-4 h-4 mr-2" />
-             Apply Filters
-           </button>
+        <div className="pt-3.5">
+           <Button className="h-9 px-4 text-[10px] font-semibold active:scale-95 transition-all rounded-lg uppercase tracking-widest">
+             <Filter className="w-3.5 h-3.5 mr-2" />
+             Reload
+           </Button>
         </div>
       </div>
     </div>

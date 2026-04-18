@@ -2,14 +2,15 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function CandidateFunnel({ data }: { data: any[] }) {
   const steps = [
-    { label: "Job Views", icon: "👁️", value: "100%", count: 1240 },
-    { label: "Applications", icon: "📝", value: "25%", count: 320 },
-    { label: "Shortlisted", icon: "✅", value: "8%", count: 92 },
-    { label: "Interviewed", icon: "🤝", value: "4%", count: 42 },
+    { label: "Views", icon: "👁️", value: "100%", count: 1240 },
+    { label: "Apply", icon: "📝", value: "25%", count: 320 },
+    { label: "Short", icon: "✅", value: "8%", count: 92 },
+    { label: "Intrvw", icon: "🤝", value: "4%", count: 42 },
     { label: "Hired", icon: "🏆", value: "1%", count: 8 },
   ];
 
@@ -18,49 +19,49 @@ export default function CandidateFunnel({ data }: { data: any[] }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-card text-card-foreground border rounded-xl overflow-hidden shadow-none p-6 mb-8"
+      className="mb-4"
     >
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-foreground">Candidate Hiring Funnel</h2>
-        <p className="text-sm text-secondary">Track candidate progress from application to hiring</p>
-      </div>
+      <Card className="border-none shadow-none bg-card">
+        <CardHeader className="px-5 py-3">
+          <CardTitle className="text-lg font-semibold tracking-tight">Hiring Funnel</CardTitle>
+        </CardHeader>
+        <CardContent className="px-5 pb-5 pt-0">
+          <div className="grid grid-cols-5 gap-2 relative">
+            {steps.map((step, i) => (
+              <div key={step.label} className="relative flex flex-col items-center">
+                <div 
+                  className={`w-full p-2.5 rounded-lg text-center flex flex-col items-center justify-center border border-border/40 transition-all hover:bg-accent/50`}
+                  style={{
+                    opacity: 1 - (i * 0.08),
+                  }}
+                >
+                  <span className="text-base mb-1">{step.icon}</span>
+                  <p className="text-[8px] font-semibold text-muted-foreground/80 uppercase tracking-widest mb-0.5">{step.label}</p>
+                  <h4 className="text-sm font-semibold text-foreground">{step.count}</h4>
+                  <Badge variant="secondary" className="bg-emerald-50/50 text-emerald-700 border-none px-1 py-0 rounded-full mt-1 text-[8px] font-semibold">
+                    {step.value}
+                  </Badge>
+                </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
-        {steps.map((step, i) => (
-          <div key={step.label} className="relative flex flex-col items-center">
-            {/* Visual Box */}
-            <div 
-              className={`w-full p-4 rounded-xl text-center flex flex-col items-center justify-center border transition-all hover:bg-slate-50`}
-              style={{
-                opacity: 1 - (i * 0.15),
-              }}
-            >
-              <span className="text-2xl mb-2">{step.icon}</span>
-              <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">{step.label}</p>
-              <h4 className="text-xl font-bold text-foreground">{step.count}</h4>
-              <p className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 rounded-full mt-2">
-                {step.value}
-              </p>
-            </div>
-
-            {/* Arrow/Indicator for funnel flow */}
-            {i < steps.length - 1 && (
-              <div className="hidden md:block absolute -right-6 top-1/2 -translate-y-1/2 z-10 text-slate-300">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
+                {i < steps.length - 1 && (
+                  <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/20">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                  </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="mt-8 p-4 bg-accent rounded-xl border border-blue-100 flex items-start gap-4">
-        <span className="text-xl text-primary">💡</span>
-        <div className="text-sm text-primary font-medium">
-          Identify where candidates drop off during your hiring process. Currently, 25% of users who view your jobs apply, which is 10% higher than the industry average.
-        </div>
-      </div>
+          <div className="mt-4 p-2.5 bg-primary/5 rounded-lg border border-primary/10 flex items-start gap-3">
+            <span className="text-sm">💡</span>
+            <div className="text-[10px] text-primary font-semibold leading-tight">
+              <span className="font-semibold uppercase tracking-wider mr-1">Insight:</span> 25% apply rate is 10% above average.
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }
